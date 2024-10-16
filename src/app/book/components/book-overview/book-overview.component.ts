@@ -1,9 +1,10 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, effect, OnDestroy, Signal} from '@angular/core';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {AsyncPipe, JsonPipe, NgForOf} from '@angular/common';
 import {BookService} from '../../services/book.service';
-import {Observable} from 'rxjs';
+import {Subscription} from 'rxjs';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'ba-book-overview',
@@ -17,12 +18,18 @@ import {Observable} from 'rxjs';
   templateUrl: './book-overview.component.html',
   styleUrl: './book-overview.component.scss',
 })
-export class BookOverviewComponent {
-  books$: Observable<Book[]>;
+export class BookOverviewComponent implements OnDestroy {
+  books: Signal<Book[]>;
   selectedBook: Book | null = null;
 
+  private subscription: Subscription | null = null;
+
   constructor(private readonly bookService: BookService) {
-    this.books$ = bookService.findAll();
+    this.books = toSignal(bookService.findAll(), {initialValue: []});
+
+    effect(() => {
+      console.log('new value: ', this.books());
+    });
   }
 
   selectBook(book: Book) {
@@ -34,7 +41,20 @@ export class BookOverviewComponent {
   }
 
   updateBook(updatedBook: Book) {
-    this.bookService.update(updatedBook);
-    this.selectBook(updatedBook);
+    const updatedBook$ = this.bookService.update(updatedBook);
+    this.subscription = updatedBook$.subscribe({
+        next: (updatedBook) => {
+          this.selectBook(updatedBook)
+        },
+        complete: () => {
+          this.subscription?.unsubscribe();
+          this.subscription = null;
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
