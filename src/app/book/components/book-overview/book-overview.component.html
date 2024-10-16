@@ -9,7 +9,7 @@
       </tr>
       </thead>
       <tbody>
-        @for (book of books; track book.id) {
+        @for (book of (books$ | async); track book.id) {
           <tr (click)="selectBook(book)" [class.table-active]="isBookSelected(book)">
             <th scope="row">{{$index + 1}}</th>
             <td>{{book.author}}</td>
