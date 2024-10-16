@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Book} from '../../model';
 import {JsonPipe} from '@angular/common';
 
@@ -12,14 +12,11 @@ import {JsonPipe} from '@angular/common';
   styleUrl: './book-details.component.scss'
 })
 export class BookDetailsComponent {
-  readonly book: Book
+  @Input({required: true, alias: 'value'})
+  book: Book | undefined | null;
 
-  constructor() {
-    this.book = {
-      author: 'F. Scott Fitzgerald',
-      title: 'The Great Gatsby'
-    }
-  }
+  @Output()
+  bookChange: EventEmitter<Book> = new EventEmitter<Book>();
 
   saveBook(event: Event) {
     event.preventDefault();
@@ -29,13 +26,13 @@ export class BookDetailsComponent {
     const titleElement = formElement.querySelector<HTMLInputElement>('#title');
     const updatedTitle = titleElement?.value
 
-    if (updatedAuthor && updatedTitle) {
+    if (updatedAuthor && updatedTitle && this.book) {
       const updatedBook: Book = {
         ...this.book,
         title: updatedTitle,
         author: updatedAuthor
       }
-      console.log('Saving book...', updatedBook);
+      this.bookChange.emit(updatedBook);
     }
   }
 }

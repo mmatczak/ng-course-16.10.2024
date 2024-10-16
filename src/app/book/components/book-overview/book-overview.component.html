@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Author</th>
+        <th scope="col">Title</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (book of books; track book.id) {
+          <tr (click)="selectBook(book)" [class.table-active]="isBookSelected(book)">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{book.author}}</td>
+            <td>{{book.title}}</td>
+          </tr>
+        }
+<!--      <tr *ngFor="let book of books; index as i">-->
+<!--        <th scope="row">{{i + 1}}</th>-->
+<!--        <td>{{book.author}}</td>-->
+<!--        <td>{{book.title}}</td>-->
+<!--      </tr>-->
+      </tbody>
+    </table>
+    <output>{{selectedBook | json}}</output>
+  </div>
+  <div class="col-4">
+    <ba-book-details (bookChange)="updateBook($event)"
+                     [value]="selectedBook"></ba-book-details>
+  </div>
+</div>
