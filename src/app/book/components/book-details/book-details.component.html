@@ -1,11 +1,11 @@
 <form (submit)="saveBook($event)">
   <div class="mb-2">
     <label for="title" class="form-label">Title:</label>
-    <input id="title" class="form-control" [value]="book?.title" />
+    <input id="title" class="form-control" [value]="book()?.title" />
   </div>
   <div class="mb-3">
     <label for="author" class="form-label">Author:</label>
-    <input id="author" class="form-control" [value]="book?.author"  />
+    <input id="author" class="form-control" [value]="book()?.author"  />
   </div>
   <button class="btn btn-primary" type="submit">Save</button>
 </form>
