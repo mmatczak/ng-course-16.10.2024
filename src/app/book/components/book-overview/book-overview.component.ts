@@ -1,9 +1,9 @@
-import {Component, effect, OnDestroy, Signal} from '@angular/core';
+import {AfterViewInit, Component, effect, ElementRef, OnDestroy, Signal, ViewChild} from '@angular/core';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {AsyncPipe, JsonPipe, NgForOf} from '@angular/common';
 import {BookService} from '../../services/book.service';
-import {Subscription} from 'rxjs';
+import {debounce, debounceTime, fromEvent, map, Subscription} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
@@ -18,7 +18,10 @@ import {toSignal} from '@angular/core/rxjs-interop';
   templateUrl: './book-overview.component.html',
   styleUrl: './book-overview.component.scss',
 })
-export class BookOverviewComponent implements OnDestroy {
+export class BookOverviewComponent implements OnDestroy, AfterViewInit {
+  @ViewChild('searchInput')
+  searchInput: ElementRef<HTMLInputElement> | null = null;
+
   books: Signal<Book[]>;
   selectedBook: Book | null = null;
 
@@ -30,6 +33,22 @@ export class BookOverviewComponent implements OnDestroy {
     effect(() => {
       console.log('new value: ', this.books());
     });
+  }
+
+  ngAfterViewInit(): void {
+    const searchInputElement = this.searchInput?.nativeElement;
+    if (searchInputElement) {
+      fromEvent(searchInputElement, 'input').pipe(
+        map(event => {
+          const inputElement = event.target as HTMLInputElement;
+          return inputElement.value;
+        }),
+        debounceTime(300)
+      )
+        .subscribe(value => {
+          console.log('input event: ', value);
+        });
+    }
   }
 
   selectBook(book: Book) {
