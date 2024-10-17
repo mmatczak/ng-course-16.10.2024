@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, effect, ElementRef, OnDestroy, Signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, ElementRef, inject, OnDestroy, Optional, Self, Signal, SkipSelf, ViewChild} from '@angular/core';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {AsyncPipe, JsonPipe, NgForOf} from '@angular/common';
 import {BookService} from '../../services/book.service';
 import {debounce, debounceTime, fromEvent, map, Subscription} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
+import { BookTableComponent } from './book-table/book-table.component';
 
 @Component({
   selector: 'ba-book-overview',
@@ -13,22 +14,26 @@ import {toSignal} from '@angular/core/rxjs-interop';
     BookDetailsComponent,
     NgForOf,
     JsonPipe,
-    AsyncPipe
+    AsyncPipe,
+    BookTableComponent
   ],
   templateUrl: './book-overview.component.html',
   styleUrl: './book-overview.component.scss',
+  providers: []
 })
 export class BookOverviewComponent implements OnDestroy, AfterViewInit {
   @ViewChild('searchInput')
   searchInput: ElementRef<HTMLInputElement> | null = null;
 
   books: Signal<Book[]>;
-  selectedBook: Book | null = null;
+  selectedBook: Book | undefined = undefined;
 
   private subscription: Subscription | null = null;
 
-  constructor(private readonly bookService: BookService) {
-    this.books = toSignal(bookService.findAll(), {initialValue: []});
+  private readonly bookService = inject(BookService);
+
+  constructor() {
+    this.books = toSignal(this.bookService.findAll(), {initialValue: []});
 
     effect(() => {
       console.log('new value: ', this.books());
@@ -53,10 +58,6 @@ export class BookOverviewComponent implements OnDestroy, AfterViewInit {
 
   selectBook(book: Book) {
     this.selectedBook = book;
-  }
-
-  isBookSelected(book: Book) {
-    return this.selectedBook === book;
   }
 
   updateBook(updatedBook: Book) {

@@ -1,0 +1,11 @@
+:host {
+  table > tbody > tr {
+    cursor: pointer;
+  }
+}
+
+:host-context(.green-header) {
+  th {
+    background-color: green;
+  }
+}
