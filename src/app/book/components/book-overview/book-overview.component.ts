@@ -6,6 +6,7 @@ import {BookService} from '../../services/book.service';
 import {debounce, debounceTime, fromEvent, map, Subscription} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
 import { BookTableComponent } from './book-table/book-table.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ba-book-overview',
@@ -31,6 +32,8 @@ export class BookOverviewComponent implements OnDestroy, AfterViewInit {
   private subscription: Subscription | null = null;
 
   private readonly bookService = inject(BookService);
+  
+  private readonly roter = inject(Router);
 
   constructor() {
     this.books = toSignal(this.bookService.findAll(), {initialValue: []});
@@ -48,7 +51,7 @@ export class BookOverviewComponent implements OnDestroy, AfterViewInit {
           const inputElement = event.target as HTMLInputElement;
           return inputElement.value;
         }),
-        debounceTime(300)
+        debounceTime(3000)
       )
         .subscribe(value => {
           console.log('input event: ', value);
@@ -58,10 +61,13 @@ export class BookOverviewComponent implements OnDestroy, AfterViewInit {
 
   selectBook(book: Book) {
     this.selectedBook = book;
+
+    this.roter.navigate(['/book', book.id]);
   }
 
   updateBook(updatedBook: Book) {
     const updatedBook$ = this.bookService.update(updatedBook);
+
     this.subscription = updatedBook$.subscribe({
         next: (updatedBook) => {
           this.selectBook(updatedBook)

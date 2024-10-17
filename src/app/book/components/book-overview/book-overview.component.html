@@ -1,15 +1,14 @@
 <section>
-  <input id="search" #searchInput>
+  <input id="search" #searchInput />
   <output>
-    {{searchInput.value}}
+    {{ searchInput.value }}
   </output>
 </section>
 <div class="row">
-  <div class="col green-header" >
-    <ba-book-table [books]="books()" (selectBook)="selectBook($event)" [selectedBook]="selectedBook"/>
-    <output>{{selectedBook | json}}</output>
-  </div>
-  <div class="col-4">
-    <ba-book-details (bookChange)="updateBook($event)" [value]="selectedBook"/>
-  </div>
+  <ba-book-table
+    [books]="books()"
+    (selectBook)="selectBook($event)"
+    [selectedBook]="selectedBook"
+  />
+  <output>{{ selectedBook | json }}</output>
 </div>

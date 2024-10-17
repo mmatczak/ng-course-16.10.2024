@@ -1,6 +1,6 @@
 import {Book} from '../model';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, delay, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,7 @@ export class BookService {
 
   update(updatedBook: Book): Observable<Book> {
     return new Observable<Book>(subscriber => {
-      setTimeout(() => {
+      // setTimeout(() => {
         const currentBooks = this.booksSubject.getValue();
         const updatedBookCopy = {...updatedBook};
         const updatedBooks = currentBooks.map(
@@ -43,7 +43,7 @@ export class BookService {
         this.booksSubject.next(updatedBooks);
         subscriber.next(updatedBookCopy);
         subscriber.complete();
-      }, 2000)
-    })
+      // }, 2000)
+    }).pipe(delay(2000))
   }
 }
