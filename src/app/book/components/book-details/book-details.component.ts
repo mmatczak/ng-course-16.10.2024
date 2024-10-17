@@ -3,7 +3,7 @@ import { Book } from '../../model';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { BookService } from '../../services/book.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs';
+import { map, Subscription, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'ba-book-details',
@@ -21,12 +21,12 @@ export class BookDetailsComponent {
 
   protected readonly bookId$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('id')), map(Number));
 
-  protected readonly nextBookId$ = this.bookId$.pipe(map(bookId => bookId+1), tap(console.log))
+  protected readonly books$ =  this.bookId$.pipe(switchMap(bookId=> this.bookService.findOne(bookId)))
 
+  protected readonly nextBookId$ = this.books$.pipe(map(book => book.id+1))
 
   constructor() {
-    this.bookId$.pipe(switchMap(bookId=> this.bookService.findOne(bookId)))
-    .subscribe((book: Book) => {
+    this.books$.subscribe((book: Book) => {
         this.book = book;
       });
   }
@@ -46,7 +46,7 @@ export class BookDetailsComponent {
         title: updatedTitle,
         author: updatedAuthor,
       };
-      this.bookService.update(updatedBook).subscribe(()=> alert("Done!"));
+    this.bookService.update(updatedBook).subscribe(()=> alert("Done!"));
     }
   }
 }

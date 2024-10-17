@@ -1,12 +1,12 @@
-import {AfterViewInit, Component, effect, ElementRef, inject, OnDestroy, Optional, Self, Signal, SkipSelf, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, OnDestroy, Optional, Self, Signal, SkipSelf, viewChild, ViewChild} from '@angular/core';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {AsyncPipe, JsonPipe, NgForOf} from '@angular/common';
 import {BookService} from '../../services/book.service';
-import {debounce, debounceTime, fromEvent, map, Subscription} from 'rxjs';
+import { debounceTime, fromEvent, map} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
 import { BookTableComponent } from './book-table/book-table.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ba-book-overview',
@@ -22,29 +22,23 @@ import { Router } from '@angular/router';
   styleUrl: './book-overview.component.scss',
   providers: []
 })
-export class BookOverviewComponent implements OnDestroy, AfterViewInit {
-  @ViewChild('searchInput')
-  searchInput: ElementRef<HTMLInputElement> | null = null;
+export class BookOverviewComponent implements AfterViewInit {
+  searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
   books: Signal<Book[]>;
-  selectedBook: Book | undefined = undefined;
-
-  private subscription: Subscription | null = null;
-
-  private readonly bookService = inject(BookService);
   
   private readonly roter = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
 
   constructor() {
-    this.books = toSignal(this.bookService.findAll(), {initialValue: []});
+    const books$ = this.route.data.pipe(map(data=> data['books']));
 
-    effect(() => {
-      console.log('new value: ', this.books());
-    });
+    this.books = toSignal(books$, {initialValue: []});
   }
 
   ngAfterViewInit(): void {
-    const searchInputElement = this.searchInput?.nativeElement;
+    const searchInputElement = this.searchInput()?.nativeElement;
     if (searchInputElement) {
       fromEvent(searchInputElement, 'input').pipe(
         map(event => {
@@ -60,27 +54,6 @@ export class BookOverviewComponent implements OnDestroy, AfterViewInit {
   }
 
   selectBook(book: Book) {
-    this.selectedBook = book;
-
     this.roter.navigate(['/book', book.id]);
-  }
-
-  updateBook(updatedBook: Book) {
-    const updatedBook$ = this.bookService.update(updatedBook);
-
-    this.subscription = updatedBook$.subscribe({
-        next: (updatedBook) => {
-          this.selectBook(updatedBook)
-        },
-        complete: () => {
-          this.subscription?.unsubscribe();
-          this.subscription = null;
-        }
-      }
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 }

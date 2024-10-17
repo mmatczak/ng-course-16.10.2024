@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../model';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, delay, filter, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,7 @@ export class BookService {
 
 
   findAll(): Observable<Book[]> {
-    // return this.booksSubject.asObservable();
-    return new Observable();
+    return this.httpClient.get<Book[]>(`http://localhost:3000/book`)
   }
 
   findOne(id: number): Observable<Book> {
@@ -21,5 +20,9 @@ export class BookService {
 
   update(updatedBook: Book): Observable<Book> {
     return this.httpClient.put<Book>(`http://localhost:3000/book/${updatedBook.id}`, updatedBook);
+  }
+
+  new(newBook: Book): Observable<Book> {
+    return this.httpClient.post<Book>(`http://localhost:3000/book`, newBook);
   }
 }
