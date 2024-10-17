@@ -10,7 +10,7 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withDebugTracing(), withComponentInputBinding()),
+    provideRouter(routes,  withComponentInputBinding()),
     provideZoneChangeDetection({ eventCoalescing: true }),
   ],
 };
