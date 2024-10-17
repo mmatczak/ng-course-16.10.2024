@@ -19,9 +19,7 @@ export class BookDetailsComponent {
 
   private readonly route = inject(ActivatedRoute);
 
-  protected readonly bookId$ = this.route.paramMap.pipe(map((paramMap) => paramMap.get('id')), map(Number));
-
-  protected readonly books$ =  this.bookId$.pipe(switchMap(bookId=> this.bookService.findOne(bookId)))
+  protected readonly books$ =  this.route.data.pipe(map(data=> data['book']));
 
   protected readonly nextBookId$ = this.books$.pipe(map(book => book.id+1))
 
