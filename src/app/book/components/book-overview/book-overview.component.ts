@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, OnDestroy, Optional, Self, Signal, SkipSelf, viewChild, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, input, OnDestroy, Optional, Self, Signal, SkipSelf, viewChild, ViewChild} from '@angular/core';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {AsyncPipe, JsonPipe, NgForOf} from '@angular/common';
@@ -23,19 +23,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   providers: []
 })
 export class BookOverviewComponent implements AfterViewInit {
-  searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
-
-  books: Signal<Book[]>;
   
   private readonly roter = inject(Router);
-  private readonly route = inject(ActivatedRoute);
 
+  searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
-  constructor() {
-    const books$ = this.route.data.pipe(map(data=> data['books']));
+  books = input.required<Book[]>();
 
-    this.books = toSignal(books$, {initialValue: []});
-  }
 
   ngAfterViewInit(): void {
     const searchInputElement = this.searchInput()?.nativeElement;

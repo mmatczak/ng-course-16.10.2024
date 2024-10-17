@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Book } from '../model';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { baseUriToken } from '../../base-uri.token';
 
 @Injectable({
   providedIn: 'root',
@@ -9,20 +10,22 @@ import { Observable } from 'rxjs';
 export class BookService {
   private readonly httpClient = inject(HttpClient);
 
-
+  private readonly BACKEND_URL = inject(baseUriToken);
+  
+  
   findAll(): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`http://localhost:3000/book`)
+    return this.httpClient.get<Book[]>(`${this.BACKEND_URL}/book`)
   }
 
   findOne(id: number): Observable<Book> {
-    return this.httpClient.get<Book>(`http://localhost:3000/book/${id}`)
+    return this.httpClient.get<Book>(`${this.BACKEND_URL}/book/${id}`)
   }
 
   update(updatedBook: Book): Observable<Book> {
-    return this.httpClient.put<Book>(`http://localhost:3000/book/${updatedBook.id}`, updatedBook);
+    return this.httpClient.put<Book>(`${this.BACKEND_URL}/book/${updatedBook.id}`, updatedBook);
   }
 
   new(newBook: Book): Observable<Book> {
-    return this.httpClient.post<Book>(`http://localhost:3000/book`, newBook);
+    return this.httpClient.post<Book>(`${this.BACKEND_URL}/book`, newBook);
   }
 }

@@ -1,9 +1,8 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Book } from '../../model';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { BookService } from '../../services/book.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { map, Subscription, switchMap, tap } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'ba-book-details',
@@ -13,21 +12,12 @@ import { map, Subscription, switchMap, tap } from 'rxjs';
   styleUrl: './book-details.component.scss',
 })
 export class BookDetailsComponent {
-  book: Book | undefined;
 
   protected readonly bookService = inject(BookService);
 
-  private readonly route = inject(ActivatedRoute);
+  protected readonly book = input.required<Book>();
 
-  protected readonly books$ =  this.route.data.pipe(map(data=> data['book']));
-
-  protected readonly nextBookId$ = this.books$.pipe(map(book => book.id+1))
-
-  constructor() {
-    this.books$.subscribe((book: Book) => {
-        this.book = book;
-      });
-  }
+  protected readonly nextBookId = computed(()=> Number(this.book().id) + 1);
 
   saveBook(event: Event) {
     event.preventDefault();
@@ -37,7 +27,7 @@ export class BookDetailsComponent {
     const updatedAuthor = authorElement?.value;
     const titleElement = formElement.querySelector<HTMLInputElement>('#title');
     const updatedTitle = titleElement?.value;
-    const originalBook = this.book;
+    const originalBook = this.book();
     if (updatedAuthor && updatedTitle && originalBook) {
       const updatedBook: Book = {
         ...originalBook,

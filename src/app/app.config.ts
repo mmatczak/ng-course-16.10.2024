@@ -6,13 +6,16 @@ import {
   withDebugTracing,
 } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { baseUriToken } from './base-uri.token';
+import { jwtTokenInterceptor } from './jwt-token.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes,  withComponentInputBinding()),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([jwtTokenInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    {provide: baseUriToken, useValue: "http://localhost:3000"}
   ],
 };
