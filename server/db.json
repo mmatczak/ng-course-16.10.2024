@@ -3,32 +3,44 @@
     {
       "id": "1",
       "author": "Douglas Crockford",
-      "title": "JavaScript. The Good Parts"
+      "title": "JavaScript. The Good Parts",
+      "dateOfPublication": "2000-01-01"
     },
     {
       "id": "2",
       "author": "Victor Savkin",
-      "title": "Angular Router"
+      "title": "Angular Router",
+      "dateOfPublication": "1992-03-02"
     },
     {
       "id": "3",
       "author": "John Smith",
-      "title": "Angular for Nerds"
+      "title": "Angular for Nerds",
+      "dateOfPublication": "2000-01-01"
     },
     {
       "id": "4",
       "author": "Joshua Bloch",
-      "title": "Java Effective Programming"
+      "title": "Java Effective Programming",
+      "dateOfPublication": "2000-01-01"
     },
     {
       "id": "e3a2",
       "title": "W pustyni i w puszczy",
-      "author": "Henryk Sienkiewicz"
+      "author": "Henryk Sienkiewicz",
+      "dateOfPublication": "2000-01-01"
     },
     {
       "id": "106b",
       "title": "Krzyzacy",
-      "author": "Henryk Sienkiewicz"
+      "author": "Henryk Sienkiewicz",
+      "dateOfPublication": "2000-01-01"
+    },
+    {
+      "id": "a935",
+      "title": "Test",
+      "author": "Test",
+      "dateOfPublication": "2000-01-01"
     }
   ]
 }
