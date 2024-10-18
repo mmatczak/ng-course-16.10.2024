@@ -4,6 +4,7 @@ import { FormGroup, FormControl, ReactiveFormsModule, FormBuilder, NonNullableFo
 import {toObservable} from '@angular/core/rxjs-interop';
 import {Book} from '../../model';
 import {MyValidators} from '../my-validators';
+import {ValidationMessageDirective} from './validation-message.directive';
 
 interface BookForm {
   title: FormControl<string>;
@@ -14,7 +15,7 @@ interface BookForm {
 @Component({
   selector: 'ba-book-form',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, NgIf],
+  imports: [ReactiveFormsModule, JsonPipe, NgIf, ValidationMessageDirective],
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.scss'
 })
