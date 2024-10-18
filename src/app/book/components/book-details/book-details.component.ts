@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {Component, computed, inject, input, output} from '@angular/core';
 import { Book } from '../../model';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { BookService } from '../../services/book.service';

@@ -86,7 +86,7 @@ export class BookFormComponent  {
           author: this.bookForm.controls.author.value,
           dateOfPublication: this.bookForm.controls.dateOfPublication.value,
         };
-        this.saveBook.emit(updatedBook);
+        setTimeout(() => this.saveBook.emit(updatedBook), 1000);
       } else {
         const updatedBook: Book = {
           title: this.bookForm.controls.title.value,

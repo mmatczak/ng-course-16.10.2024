@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../model';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {delay, Observable} from 'rxjs';
 import { baseUriToken } from '../../base-uri.token';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class BookService {
   private readonly httpClient = inject(HttpClient);
 
   private readonly BACKEND_URL = inject(baseUriToken);
-  
-  
+
+
   findAll(): Observable<Book[]> {
     return this.httpClient.get<Book[]>(`${this.BACKEND_URL}/book`)
   }
@@ -22,7 +22,7 @@ export class BookService {
   }
 
   update(updatedBook: Book): Observable<Book> {
-    return this.httpClient.put<Book>(`${this.BACKEND_URL}/book/${updatedBook.id}`, updatedBook);
+    return this.httpClient.put<Book>(`${this.BACKEND_URL}/book/${updatedBook.id}`, updatedBook).pipe(delay(1000));
   }
 
   new(newBook: Book): Observable<Book> {
