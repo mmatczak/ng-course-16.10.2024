@@ -4,12 +4,13 @@ import { BookOverviewComponent } from "./book/components/book-overview/book-over
 import { booksResolver } from "./book/components/book-overview/books.resolver";
 import { bookResolver } from "./book/components/book-details/book.resolver";
 import { InfoComponent } from "./book/components/info/info.component";
+import { BookNewComponent } from './book/components/book-new/book-new.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
   { path: 'search', title: 'Search', component: BookOverviewComponent, resolve:{books: booksResolver} },
   { path: 'book', children: [
-      { path: 'new',  title: 'New Book', component: BookDetailsComponent },
+      { path: 'new',  title: 'New Book', component: BookNewComponent },
       { path: ':id',  title: 'Book details', component: BookDetailsComponent, resolve:{book: bookResolver} },
     ],
   },

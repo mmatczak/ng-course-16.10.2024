@@ -1,14 +1,4 @@
-<form (submit)="saveBook($event)">
-  <div class="mb-2">
-    <label for="title" class="form-label">Title:</label>
-    <input id="title" class="form-control" [value]="book().title" />
-  </div>
-  <div class="mb-3">
-    <label for="author" class="form-label">Author:</label>
-    <input id="author" class="form-control" [value]="book().author"  />
-  </div>
-  <button class="btn btn-primary">Save</button>
-</form>
+<ba-book-form [book]="book()" (saveBook)="onSaveBook($event)"></ba-book-form>
 
 
 <a [routerLink]="['../', nextBookId()]">Next Book with id {{nextBookId()}}</a>

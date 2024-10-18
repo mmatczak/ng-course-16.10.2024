@@ -3,11 +3,12 @@ import { Book } from '../../model';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { BookService } from '../../services/book.service';
 import { RouterLink } from '@angular/router';
+import {BookFormComponent} from '../book-form/book-form.component';
 
 @Component({
   selector: 'ba-book-details',
   standalone: true,
-  imports: [JsonPipe, RouterLink, AsyncPipe],
+  imports: [JsonPipe, RouterLink, AsyncPipe, BookFormComponent],
   templateUrl: './book-details.component.html',
   styleUrl: './book-details.component.scss',
 })
@@ -19,22 +20,7 @@ export class BookDetailsComponent {
 
   protected readonly nextBookId = computed(()=> Number(this.book().id) + 1);
 
-  saveBook(event: Event) {
-    event.preventDefault();
-    const formElement = event.target as HTMLFormElement;
-    const authorElement =
-      formElement.querySelector<HTMLInputElement>('#author');
-    const updatedAuthor = authorElement?.value;
-    const titleElement = formElement.querySelector<HTMLInputElement>('#title');
-    const updatedTitle = titleElement?.value;
-    const originalBook = this.book();
-    if (updatedAuthor && updatedTitle && originalBook) {
-      const updatedBook: Book = {
-        ...originalBook,
-        title: updatedTitle,
-        author: updatedAuthor,
-      };
+  onSaveBook(updatedBook: Book) {
     this.bookService.update(updatedBook).subscribe(()=> alert("Done!"));
-    }
   }
 }

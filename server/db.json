@@ -2,12 +2,12 @@
   "book": [
     {
       "id": "1",
-      "author": "Douglas Crockford TEst",
+      "author": "Douglas Crockford",
       "title": "JavaScript. The Good Parts"
     },
     {
       "id": "2",
-      "author": "Victor Savkin1234",
+      "author": "Victor Savkin",
       "title": "Angular Router"
     },
     {
@@ -19,6 +19,16 @@
       "id": "4",
       "author": "Joshua Bloch",
       "title": "Java Effective Programming"
+    },
+    {
+      "id": "e3a2",
+      "title": "W pustyni i w puszczy",
+      "author": "Henryk Sienkiewicz"
+    },
+    {
+      "id": "106b",
+      "title": "Krzyzacy",
+      "author": "Henryk Sienkiewicz"
     }
   ]
 }
