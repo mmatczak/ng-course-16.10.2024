@@ -1,8 +1,9 @@
 import { Component, effect, input, output, Input, inject } from '@angular/core';
 import { JsonPipe, NgIf } from '@angular/common'
-import { FormGroup, FormControl, ReactiveFormsModule, FormBuilder, NonNullableFormBuilder, Validators } from '@angular/forms'
+import { FormGroup, FormControl, ReactiveFormsModule, FormBuilder, NonNullableFormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms'
 import {toObservable} from '@angular/core/rxjs-interop';
 import {Book} from '../../model';
+import {MyValidators} from '../my-validators';
 
 interface BookForm {
   title: FormControl<string>;
@@ -47,7 +48,7 @@ export class BookFormComponent  {
   readonly bookForm: FormGroup<BookForm> = this.fb.group({
     title: ['', Validators.required],
     author: ['', Validators.required],
-    dateOfPublication: ['', [Validators.required, Validators.pattern(/(\d{4})-(\d{2})-(\d{2})/)]]
+    dateOfPublication: ['', [Validators.required, Validators.pattern(/(\d{4})-(\d{2})-(\d{2})/), MyValidators.correctDate, MyValidators.dateTo('2030-01-01')]]
   });
 
   constructor() {

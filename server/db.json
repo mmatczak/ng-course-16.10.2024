@@ -41,6 +41,12 @@
       "title": "Test",
       "author": "Test",
       "dateOfPublication": "2000-01-01"
+    },
+    {
+      "id": "161a",
+      "title": "dsdsf",
+      "author": "sdfsdf",
+      "dateOfPublication": "sdfsdf"
     }
   ]
 }
